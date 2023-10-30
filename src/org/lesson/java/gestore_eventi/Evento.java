@@ -41,7 +41,7 @@ public class Evento {
         return totalSeat;
     }
 
-    private LocalDate getPresentDate() {
+   protected LocalDate getPresentDate() {
         return presentDate;
     }
 

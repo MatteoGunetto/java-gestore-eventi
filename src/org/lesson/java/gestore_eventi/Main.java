@@ -1,28 +1,24 @@
 package org.lesson.java.gestore_eventi;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-//import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        //boolean exit = false;
 
-        //while(!exit) {
         System.out.println("\n------------------------------\n");
 
         System.out.print("Inserire nome evento: ");
-        String name = in.nextLine();
-
-        //if(name.equals("!exit")) exit = true;
+        String concertName = in.nextLine();
 
         System.out.println("\n------------------------------\n");
 
         System.out.print("Inserire data evento (yyyy-mm-dd): ");
         String dateStr1 = in.nextLine();
-        LocalDate eventDate = LocalDate.parse(dateStr1);
+        LocalDate concertDate = LocalDate.parse(dateStr1);
 
         System.out.println("\n------------------------------\n");
 
@@ -30,58 +26,73 @@ public class Main {
         String dateStr2 = in.nextLine();
         LocalDate actualDate = LocalDate.parse(dateStr2);
 
-
         System.out.println("\n------------------------------\n");
 
         System.out.println("Inserire posti a sedere totali: ");
-        int totalSeats = Integer.parseInt(in.nextLine());
+        int concertTotalSeats = Integer.parseInt(in.nextLine());
+
+        System.out.println("\n------------------------------\n");
+
+        System.out.println("Ora attuale (HH:mm): ");
+        String hourStr1 = in.nextLine();
+        LocalTime concertHour = LocalTime.parse(hourStr1);
+
+        System.out.println("\n------------------------------\n");
+
+        System.out.println("Ora del concerto (HH:mm): ");
+        String hourStr2 = in.nextLine();
+        LocalTime actualHour = LocalTime.parse(hourStr2);
+
+        System.out.println("\n------------------------------\n");
+
+        System.out.println("Inserire prezzo del concerto: ");
+        BigDecimal concertPrice = BigDecimal.valueOf(Double.parseDouble(in.nextLine()));
 
         try {
-            Evento show = new Evento(name, eventDate, actualDate, totalSeats);
 
-            System.out.println(show);
+            Concerto selezionato = new Concerto(concertName, concertDate, actualDate, concertTotalSeats, concertHour, actualHour, concertPrice);
+
+            System.out.println("\n------------------------------\n");
+
+            System.out.println("Concerto aggiunto");
+
+            System.out.println("\n------------------------------\n");
+
+            System.out.println(selezionato.toString());
 
             System.out.println("\n------------------------------\n");
 
             System.out.print("Quante prenotazioni? ");
-            int reservation = Integer.parseInt(in.nextLine());
+            int reservedSeats = Integer.parseInt(in.nextLine());
 
-            for(int i=0; i<reservation; i++) {
-                show.reserve();
+            System.out.println("\n------------------------------\n");
+
+            for(int i=0; i<reservedSeats; i++) {
+                selezionato.reserve();
             }
-
-            System.out.println("\n------------------------------\n");
-
-            System.out.println("Prenotazione effettuata.");
-
-            System.out.println("\n------------------------------\n");
-
-            System.out.println("Posti prenotati: " + show.getReservedSeat() + " | Posti liberi: " + (show.getTotalSeat() - show.getReservedSeat()));
+            System.out.println("Posti prenotati:\n");
+            System.out.println("Posti prenotati: "+ selezionato.getReservedSeat() + " | Posti liberi " + (selezionato.getTotalSeat() - selezionato.getReservedSeat()));
 
             System.out.println("\n------------------------------\n");
 
             System.out.print("Quante prenotazioni vuoi annullare? ");
-            int deletion = Integer.parseInt(in.nextLine());
+            int seatsToRemove = Integer.parseInt(in.nextLine());
 
-            for(int i=0; i<deletion; i++) {
-                show.removeReservation();
+            System.out.println("\n------------------------------\n");
+
+            int oldFreeSeats = selezionato.getTotalSeat() - selezionato.getReservedSeat();
+            for(int i=0; i<seatsToRemove; i++) {
+                selezionato.removeReservation();
             }
+            System.out.println("Prenotazione cancellata.\n");
+            System.out.println("Posti liberi prima della cancellazione: "+ oldFreeSeats + " | Posti liberi dopo la cancellazione " + (selezionato.getTotalSeat() - selezionato.getReservedSeat()));
 
             System.out.println("\n------------------------------\n");
-
-            System.out.println("Prenotazione cancellata.");
-
-            System.out.println("\n------------------------------\n");
-
-            System.out.println("Posti prenotati: " + show.getReservedSeat() + " | Posti liberi: " + (show.getTotalSeat() - show.getReservedSeat()));
 
         }catch(Exception e) {
             in.close();
             System.err.println(e.getMessage());
         }
-
-
-        //}
 
         in.close();
 
